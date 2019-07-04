@@ -1,0 +1,65 @@
+
+export your lambda function from aws
+On your linux PC:
+unzip the zip file and rename the directory to your preferred name - in this case calling it auto_stop_all - it has no effect when you upload it zipped later to aws.
+
+
+https://pypi.org/project/boto3/
+
+First, install the library and set a default region:
+
+$ pip install boto3
+Next, set up credentials (in e.g. ~/.aws/credentials):
+
+[default]
+aws_access_key_id = YOUR_KEY
+aws_secret_access_key = YOUR_SECRET
+Then, set up a default region (in e.g. ~/.aws/config):
+
+[default]
+region=us-east-1
+Then, from a Python3 interpreter:
+
+python3
+>>> import boto3
+>>> s3 = boto3.resource('s3')
+>>> for bucket in s3.buckets.all():
+        print(bucket.name)
+        
+        
+https://www.mandsconsulting.com/lambda-functions-with-newer-version-of-boto3-than-available-by-default/
+
+Place yourself in the directory (auto_stop_all) with the lambda_function.py
+
+Once in this directory create a requirements.txt file requiring the latest version of the boto3 and botocore modules, or add the same to your existing requirements.txt:
+
+boto3==1.9.182
+botocore==1.12.182
+
+Once this change is made, issue the command:
+
+> pip install -r requirements.txt -t .
+This command installs the boto3 and botocore correct versions and their required dependencies in the directory the command is executed within. The result is a directory such as:
+
+If needed Change the code that calls boto3. But its not required as long as you follow this plan!
+
+test the end result with this :
+
+python3
+import lambda_function
+context = []
+event = []
+lambda_function.lambda_handler(event,context)
+quit() 
+
+
+Now in the directory with the lambda_function.py (auto_stop_all) file zip it all:
+. Make sure that its not more than 10Mbyte. Otherwise it has to be uploaded into s3 first!.
+When you have zipped it. Make sure that inside the zip file that there is no zip_directory. Meaning that lambda_handler.py is in the root of the zip file!
+zip -r ../auto_stop_all.zip *
+
+Now upload the zip file (auto_stop_all.zip) to aws lambda funtion
+
+Please note its not possible to edit manually anymore. Now test it in aws gui!.
+
+ 
