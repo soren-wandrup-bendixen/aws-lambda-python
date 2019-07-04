@@ -16,16 +16,17 @@ import json
 import stop_ec2
 import stop_sagemaker
 import stop_robomaker
+import stop_rds
 import simple_notification
 
 def	suspend_autoscale():
-  response = client.suspend_processes(
-	  AutoScalingGroupName='string',
-	  ScalingProcesses=[
-		  'string',
-	  ]
-  )
-  return 
+	response = client.suspend_processes(
+		AutoScalingGroupName='string',
+		ScalingProcesses=[
+			'string',
+		]
+	)
+	return 
   
   
 def	lambda_handler(event, context):
@@ -39,6 +40,8 @@ def	lambda_handler(event, context):
 	stop_ec2.stop_instances('ec2',	RunningInstances)
 	stop_sagemaker.stop_jobs('sagemaker', RunningInstances)
 	stop_robomaker.stop_jobs('robomaker',RunningInstances)
+	stop_rds.stop_instances('rds',RunningInstances)
+	stop_rds.stop_clusters('rds',RunningInstances)
 	if	len(RunningInstances) >	0:
 		instanceList = json.dumps(RunningInstances)
 		simple_notification.send_info(instanceList)
