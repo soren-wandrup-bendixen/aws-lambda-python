@@ -24,19 +24,19 @@ import boto3
 
 # instance_type = 'ec2'
 def stop_instances(instance_type, RunningInstances) : 
-    instance_resources = boto3.resource(instance_type)
-    filters = [
-     {
-      'Name': 'instance-state-name',
-      'Values': ['running']
-     }
-    ]
+	instance_resources = boto3.resource(instance_type)
+	filters = [
+	 {
+	  'Name': 'instance-state-name',
+	  'Values': ['running']
+	 }
+	]
 
-    instances = instance_resources.instances.filter(Filters = filters)
-    
-    for instance in instances:
-        RunningInstances.append(instance_type + '    ' + instance.id)
-        instance.stop()
-    
-    return  
+	instances = instance_resources.instances.filter(Filters = filters)
+	
+	for instance in instances:
+		RunningInstances.append(instance_type + '    ' + instance.id)
+		instance.stop()
+	
+	return  
  
