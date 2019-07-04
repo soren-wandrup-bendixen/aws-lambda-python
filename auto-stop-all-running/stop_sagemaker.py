@@ -20,8 +20,8 @@ def	stop_jobs(instance_type,RunningInstances) :
 		response = client.stop_training_job( TrainingJobName=job_name	)
 		
 	# *** stop_compilation_job	that are running
-	jobs =	client.list_compilation_jobs( StatusEquals='InProgress'	)['CompilationJobSummaries']
-	for job in	jobs2:
+	jobs =	client.list_compilation_jobs( StatusEquals='INPROGRESS'	)['CompilationJobSummaries']
+	for job in	jobs:
 		job_name = job['CompilationJobName']
 		RunningInstances.append(instance_type	+ '	CompilationJobName	  ' + job_name)
 		response = client.stop_compilation_job( CompilationJobName=job_name )
@@ -34,7 +34,7 @@ def	stop_jobs(instance_type,RunningInstances) :
 		response = client.stop_hyper_parameter_tuning_job( HyperParameterTuningJobName=job_name )
 
 	# *** stop_labeling_job that are running
-	jobs	= client.list_labeling_jobs( StatusEquals='InProgress' )['LabelingJobSummaries']
+	jobs	= client.list_labeling_jobs( StatusEquals='InProgress' )['LabelingJobSummaryList']
 	for job in jobs:
 		job_name =	job['LabelingJobName']
 		RunningInstances.append(instance_type + ' LabelingJobName	  ' + job_name)
