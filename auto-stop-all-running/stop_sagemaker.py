@@ -1,6 +1,6 @@
 # File_name: stop_sagemaker.py
 # Purpose: Stop	SageMaker that are running
-# Problem: Amazon boto3	will not list_compilation_jobs and not list_labeling_jobs!
+# Problem: 
 # Author: Søren	Wandrup-Bendixen
 # Email: soren.wandrup-Bendixen@cybercom.com
 # Created: 2019-07-01

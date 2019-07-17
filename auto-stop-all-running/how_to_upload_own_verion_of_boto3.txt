@@ -62,4 +62,7 @@ Now upload the zip file (auto_stop_all.zip) to aws lambda funtion
 
 Please note its not possible to edit manually anymore. Now test it in aws gui!.
 
- 
+recommend also installing aws-cli
+
+on my opensuse its:
+zypper install aws-cli
