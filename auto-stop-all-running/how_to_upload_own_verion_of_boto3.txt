@@ -66,3 +66,6 @@ recommend also installing aws-cli
 
 on my opensuse its:
 zypper install aws-cli
+
+
+aws lambda update-function-code --function-name auto-stop-all-running --zip-file fileb://auto_stop_all.zip

@@ -7,11 +7,10 @@
 # Currently not stopping 
 # 1. dynamodb (no support for stop). What does a dynomodb cost if its not getting used? 
 # 2. vpc (no cost)
-# 3. 
+# 3. Can not stop s3. Have to drop s3 to do that and that is not wanted.
+
 
 # To be developed
-
-# stop_athena
 # stop_batch
 # stop_cloudfront stop_stack_set_operation
 # stop_docdb
@@ -61,8 +60,11 @@ def	lambda_handler(event, context):
 	delete_nat_gateway.delete_ec2_nat_gateways('ec2',	RunningInstances)
 	stop_sagemaker.stop_jobs('sagemaker', RunningInstances)
 	stop_robomaker.stop_jobs('robomaker',RunningInstances)
+	
 	stop_rds.stop_instances('rds',RunningInstances)
+	stop_rds.autostart_instances('rds',RunningInstances)
 	stop_rds.stop_clusters('rds',RunningInstances)
+	stop_rds.autostart_clusters('rds',RunningInstances)
 	
 	if	len(RunningInstances) >	0:
 		instanceList = json.dumps(RunningInstances)
