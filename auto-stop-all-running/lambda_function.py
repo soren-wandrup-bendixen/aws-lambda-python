@@ -3,7 +3,8 @@
 # Author: Søren	Wandrup-Bendixen
 # Email: soren.wandrup-Bendixen@cybercom.com
 # Created: 2019-07-01
-# Called from CloudWatch event rule	scheduled :	cron( 0	18 ? * * * ) 
+# Called from CloudWatch event rule	scheduled :	cron( 0	18,19 ? * * * ) 
+# Total time to run per execution is 10.4 seconds. And is set to run twice a day. 
 # Currently not stopping 
 # 1. not stopping dynamodb (no support for stop). You only pay for using it when you access it. But have to delete dax on it! 
 # 2. Not stopping lambda, cloudwatch - would kill my self
@@ -15,7 +16,6 @@
 # stop_simpledb - will delete the domain calling delete_domain
 # stop_cloudfront stop_stack_set_operation
 # stop_elastisearch
-# stop_glue
 # stop_iot
 # change_waf change waf to free edition
  
@@ -36,6 +36,7 @@ import stop_dax
 import stop_kinesis
 import stop_kinesisanalytics
 import stop_elasticache
+import stop_glue
 
 def	lambda_handler(event, context):
 
@@ -63,6 +64,7 @@ def	lambda_handler(event, context):
 	stop_kinesis.delete_streams('kinesis',RunningInstances)	
 	stop_kinesisanalytics.stop_applications('kinesisanalytics',RunningInstances)	
 	stop_elasticache.delete_clusters('elasticache',	RunningInstances)
+	stop_glue.stop_jobs('glue',	RunningInstances)
 	
 	if	len(RunningInstances) >	0:
 		instanceList = json.dumps(RunningInstances)
