@@ -37,6 +37,8 @@ import stop_kinesis
 import stop_kinesisanalytics
 import stop_elasticache
 import stop_glue
+import stop_elastisearch
+
 
 def	lambda_handler(event, context):
 
@@ -65,6 +67,7 @@ def	lambda_handler(event, context):
 	stop_kinesisanalytics.stop_applications('kinesisanalytics',RunningInstances)	
 	stop_elasticache.delete_clusters('elasticache',	RunningInstances)
 	stop_glue.stop_jobs('glue',	RunningInstances)
+	stop_elastisearch.delete_domains('es',	RunningInstances)
 	
 	if	len(RunningInstances) >	0:
 		instanceList = json.dumps(RunningInstances)
