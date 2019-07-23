@@ -15,12 +15,12 @@
 # stop_batch - 
 # stop_simpledb - will delete the domain calling delete_domain
 # stop_cloudfront stop_stack_set_operation
-# stop_elastisearch
 # stop_iot
 # change_waf change waf to free edition
  
 import json
 import simple_notification  
+import traceback
 
 import get_list_of_possible_resources
 import stop_autoscaling
@@ -38,43 +38,47 @@ import stop_kinesisanalytics
 import stop_elasticache
 import stop_glue
 import stop_elastisearch
+import stop_dms
 
 
 def	lambda_handler(event, context):
 
 	RunningInstances =	[]
-	# get_list_of_possible_resources.fail_with_list('?')
-	stop_autoscaling.suspend_processes('autoscaling',	RunningInstances)
-	# Stop: load balancers
-	stop_ecs.stop_instances('ecs',	RunningInstances)
-	# Stop: Amazon Elastic Container Service for Kubernetes CreateOperation
-	stop_eks.delete_clusters('eks',	RunningInstances)
-	stop_ec2.stop_instances('ec2',	RunningInstances)
-	# Stop: Amazon Elastic Compute Cloud NatGateway
-	stop_nat_gateway.delete_ec2_nat_gateways('ec2',	RunningInstances)
-	stop_sagemaker.stop_jobs('sagemaker', RunningInstances)
-	stop_robomaker.stop_jobs('robomaker',RunningInstances)
-	
-	stop_rds.stop_instances('rds',RunningInstances)
-	stop_rds.autostart_instances('rds',RunningInstances)
-	stop_rds.stop_clusters('rds',RunningInstances)
-	stop_rds.autostart_clusters('rds',RunningInstances)
-	# stop docdb - same logic as rds cluster
-	stop_rds.stop_clusters('docdb',RunningInstances)
-	stop_dax.delete_clusters('dax',RunningInstances)
-	stop_emr.stop_clusters('emr',RunningInstances)
-	stop_kinesis.delete_streams('kinesis',RunningInstances)	
-	stop_kinesisanalytics.stop_applications('kinesisanalytics',RunningInstances)	
-	stop_elasticache.delete_clusters('elasticache',	RunningInstances)
-	stop_glue.stop_jobs('glue',	RunningInstances)
-	stop_elastisearch.delete_domains('es',	RunningInstances)
-	
-	if	len(RunningInstances) >	0:
-		instanceList = json.dumps(RunningInstances)
-		simple_notification.send_info(instanceList)
-	else:
-		instanceList = ''
+	instanceList = ''
 
+	try: 
+		# only in play when a list of clients is wanted. 
+		# get_list_of_possible_resources.fail_with_list('?')
+		stop_autoscaling.suspend_processes('autoscaling',	RunningInstances)
+		stop_ecs.stop_instances('ecs',	RunningInstances) # Stop: load balancers
+		stop_eks.delete_clusters('eks',	RunningInstances) # Stop: Amazon Elastic Container Service for Kubernetes CreateOperation
+		stop_ec2.stop_instances('ec2',	RunningInstances)
+		stop_nat_gateway.delete_ec2_nat_gateways('ec2',	RunningInstances) # Stop: Amazon Elastic Compute Cloud NatGateway
+		stop_sagemaker.stop_jobs('sagemaker', RunningInstances)
+		stop_robomaker.stop_jobs('robomaker',RunningInstances)
+		stop_rds.stop_instances('rds',RunningInstances)
+		stop_rds.autostart_instances('rds',RunningInstances)
+		stop_rds.stop_clusters('rds',RunningInstances)
+		stop_rds.autostart_clusters('rds',RunningInstances)
+		stop_rds.stop_clusters('docdb',RunningInstances) # stop docdb - same logic as rds cluster
+		stop_dax.delete_clusters('dax',RunningInstances)
+		stop_emr.stop_clusters('emr',RunningInstances)
+		stop_kinesis.delete_streams('kinesis',RunningInstances)	
+		stop_kinesisanalytics.stop_applications('kinesisanalytics',RunningInstances)	
+		stop_elasticache.delete_clusters('elasticache',	RunningInstances)
+		stop_glue.stop_jobs('glue',	RunningInstances)
+		stop_elastisearch.delete_domains('es',	RunningInstances)
+		stop_dms.delete_instances('dms',	RunningInstances)
+		#	stop_iot_stop_all('iot',	RunningInstances)	
+		if	len(RunningInstances) >	0:
+			instanceList = json.dumps(RunningInstances)
+			simple_notification.send_info(instanceList)
+	except Exception as exception:
+		if	len(RunningInstances) >	0:
+			instanceList = json.dumps(RunningInstances)
+		simple_notification.send_info(instanceList + ' - exception ' + traceback.format_exc() )
+		raise exception 
+		
 	return	{
 		"statusCode":	200,
 		"body": instanceList 
