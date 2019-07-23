@@ -11,7 +11,6 @@
 # 3. Not stopping firehose (kinesis). Only cost meney when data is ingested. So stop that.
 
 # To be developed
-# stop_redshift. As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
 # stop_batch - 
 # stop_simpledb - will delete the domain calling delete_domain
 # stop_cloudfront stop_stack_set_operation
@@ -39,7 +38,7 @@ import stop_elasticache
 import stop_glue
 import stop_elastisearch
 import stop_dms
-
+import stop_redshift
 
 def	lambda_handler(event, context):
 
@@ -69,6 +68,8 @@ def	lambda_handler(event, context):
 		stop_glue.stop_jobs('glue',	RunningInstances)
 		stop_elastisearch.delete_domains('es',	RunningInstances)
 		stop_dms.delete_instances('dms',	RunningInstances)
+		stop_redshift.change_to_smallest('redshift',	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
+		# stop_redshift.delete_cluster('redshift',	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
 		#	stop_iot_stop_all('iot',	RunningInstances)	
 		if	len(RunningInstances) >	0:
 			instanceList = json.dumps(RunningInstances)
