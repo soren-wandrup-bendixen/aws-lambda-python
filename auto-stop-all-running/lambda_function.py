@@ -23,6 +23,7 @@ import traceback
 
 import get_list_of_possible_resources
 import stop_autoscaling
+import stop_elb
 import stop_ecs
 import stop_eks
 import stop_ec2
@@ -49,7 +50,9 @@ def	lambda_handler(event, context):
 		# only in play when a list of clients is wanted. 
 		# get_list_of_possible_resources.fail_with_list('?')
 		stop_autoscaling.suspend_processes('autoscaling',	RunningInstances)
-		stop_ecs.stop_instances('ecs',	RunningInstances) # Stop: load balancers
+		stop_elb.delete_instances('elb',	RunningInstances) # Delete load balancers
+		stop_elb.delete_instances('elbv2',	RunningInstances) # Delete load balancers
+		stop_ecs.stop_instances('ecs',	RunningInstances) # Stop: Amazon Elastic Container Service (ECS)
 		stop_eks.delete_clusters('eks',	RunningInstances) # Stop: Amazon Elastic Container Service for Kubernetes CreateOperation
 		stop_ec2.stop_instances('ec2',	RunningInstances)
 		stop_nat_gateway.delete_ec2_nat_gateways('ec2',	RunningInstances) # Stop: Amazon Elastic Compute Cloud NatGateway
