@@ -7,6 +7,7 @@
 # Called from lambda_handler.py
 
 import boto3
+from botocore.exceptions import ClientError
 
 # instance_type	= 'sagemaker'
 def	stop_jobs(instance_type,region_name_,RunningInstances) :	
@@ -26,9 +27,13 @@ def	stop_jobs(instance_type,region_name_,RunningInstances) :
 			job_name = job['CompilationJobName']
 			RunningInstances.append(instance_type	 + '	'	+ region_name_ + '	CompilationJobName	  ' + job_name)
 			response = client.stop_compilation_job( CompilationJobName=job_name )
-	except Exception:
-		print ( instance_type	 + '	'	+ region_name_ + '	 does not support CompilationJobSummaries')
-	
+	except ClientError as exception:
+		if exception.response['Error']['Code'] == 'UnknownOperationException' and 'The requested operation is not supported in the called region.' in exception.response['Error']['Message'] :
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support CompilationJobSummaries	' )
+		else:
+#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support CompilationJobSummaries	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			raise exception
+			
 	# *** stop_hyper_parameter_tuning_job that	are	running
 	jobs =	client.list_hyper_parameter_tuning_jobs( StatusEquals='InProgress' )['HyperParameterTuningJobSummaries']
 	for job in	jobs:
@@ -43,8 +48,13 @@ def	stop_jobs(instance_type,region_name_,RunningInstances) :
 			job_name =	job['LabelingJobName']
 			RunningInstances.append(instance_type  + '	'	+ region_name_ + ' LabelingJobName	  ' + job_name)
 			response =	client.stop_labeling_job( LabelingJobName=job_name )
-	except Exception:
-		print ( instance_type	 + '	'	+ region_name_ + '	 does not support LabelingJobSummaryList')
+	except ClientError as exception:
+		if exception.response['Error']['Code'] == 'UnknownOperationException' and 'The requested operation is not supported in the called region.' in exception.response['Error']['Message'] :
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support LabelingJobSummaryList	' )
+		else:
+#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support LabelingJobSummaryList	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			raise exception
+
 
 
 	# *** stop_transform_job that are running
@@ -54,8 +64,13 @@ def	stop_jobs(instance_type,region_name_,RunningInstances) :
 			job_name = job['TransformJobName']
 			RunningInstances.append(instance_type	 + '	'	+ region_name_ + '	TransformJobName	' + job_name)
 			response = client.stop_transform_job(	TransformJobName=job_name )
-	except Exception:
-		print ( instance_type	 + '	'	+ region_name_ + '	 does not support TransformJobSummaries')
+	except ClientError as exception:
+		if exception.response['Error']['Code'] == 'UnknownOperationException' and 'The requested operation is not supported in the called region.' in exception.response['Error']['Message'] :
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support TransformJobSummaries	' )
+		else:
+#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support TransformJobSummaries	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			raise exception
+
 
 
 	# *** stop_notebook_instance that are running

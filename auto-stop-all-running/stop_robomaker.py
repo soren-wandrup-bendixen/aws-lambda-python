@@ -7,6 +7,9 @@
 # Called from lambda_handler.py
 
 import boto3
+from botocore.exceptions import EndpointConnectionError
+from botocore.exceptions import ClientError
+
  
 # instance_type = 'robomaker'
 def stop_jobs(instance_type,region_name_,RunningInstances) : 
@@ -27,8 +30,16 @@ def stop_jobs(instance_type,region_name_,RunningInstances) :
 				RunningInstances.append(instance_type  + '	'	+ region_name_ + ' DeploymentJobName	' + job_name)
 				print(status_value  + '	'	+ region_name_ + ' deployemnt ' + job_name);
 				response = client.cancel_deployment_job( job=job_name )
-	except Exception:
-		print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs')
+	except EndpointConnectionError as exception:
+		print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' )
+	except ClientError as exception:
+		if exception.response['Error']['Code'] == 'ForbiddenException' :
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' )
+		else:
+#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			raise exception
+
+
 
 		
 	try:
@@ -46,7 +57,14 @@ def stop_jobs(instance_type,region_name_,RunningInstances) :
 				RunningInstances.append(instance_type  + '	'	+ region_name_ + ' SimulationJobName	' + job_name)
 				print(status_value  + '	'	+ region_name_ + ' simulation ' + job_name);
 				response = client.cancel_simulation_job( job=job_name )
-	except Exception:
-		print ( instance_type	 + '	'	+ region_name_ + '	 does not support simulationJobSummaries')
+	except EndpointConnectionError as exception:
+		print ( instance_type	 + '	'	+ region_name_ + '	 does not support simulationJobSummaries	' )
+	except ClientError as exception:
+		if exception.response['Error']['Code'] == 'ForbiddenException' :
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support simulationJobSummaries	' )
+		else:
+#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support simulationJobSummaries	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			raise exception
+
 
 	return

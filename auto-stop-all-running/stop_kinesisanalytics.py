@@ -7,6 +7,8 @@
 # Called from lambda_handler.py
 
 import boto3
+from botocore.exceptions import EndpointConnectionError
+
 
 def stop_applications(instance_type,region_name_,RunningInstances) : 	
 	client = boto3.client(instance_type, region_name=region_name_)
@@ -18,8 +20,8 @@ def stop_applications(instance_type,region_name_,RunningInstances) :
 				RunningInstances.append(instance_type + '	'	+ region_name_ + ' application ' + application_name )
 				print(cluster['Status']  + '	'	+ region_name_ + ' application ' + application_name);
 				response = client.stop_application( ApplicationName=application_name )
-	except Exception:
-		print ( instance_type	 + '	'	+ region_name_ + '	 does not support ApplicationSummaries')
+	except EndpointConnectionError as exception:
+		print ( instance_type	 + '	'	+ region_name_ + '	 does not support ApplicationSummaries	' )
 
 	return
 
