@@ -8,6 +8,8 @@
 
 import boto3
 from botocore.exceptions import EndpointConnectionError
+from botocore.exceptions import ClientError
+
 
 
 def stop_applications(instance_type,region_name_,RunningInstances) : 	
@@ -22,6 +24,15 @@ def stop_applications(instance_type,region_name_,RunningInstances) :
 				response = client.stop_application( ApplicationName=application_name )
 	except EndpointConnectionError as exception:
 		print ( instance_type	 + '	'	+ region_name_ + '	 does not support ApplicationSummaries	' )
+	except ClientError as exception:
+		if exception.response['Error']['Code'] == 'InternalFailure' :
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' )
+		else:
+#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			raise exception
+
+
+
 
 	return
 

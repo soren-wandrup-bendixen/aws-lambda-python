@@ -8,7 +8,7 @@
 # Currently not stopping 
 # 1. not stopping dynamodb (no support for stop). You only pay for using it when you access it. But have to delete dax on it! 
 # 2. Not stopping lambda, cloudwatch - would kill my self
-# 3. Not stopping firehose (kinesis). Only cost meney when data is ingested. So stop that.
+# 3. Not stopping firehose (kinesis). Only cost money when data is ingested. So stop that instead.
 
 # To be developed
 # stop_batch - 
