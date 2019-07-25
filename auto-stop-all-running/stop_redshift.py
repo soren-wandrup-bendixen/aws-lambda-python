@@ -9,8 +9,8 @@
 import boto3
 
 # instance_type = 'redshift'
-def change_to_smallest(instance_type,RunningInstances) : 
-	client = boto3.client(instance_type)
+def change_to_smallest(instance_type,region_name_,RunningInstances) : 
+	client = boto3.client(instance_type, region_name=region_name_)
 	clusters = client.describe_clusters(  )['Clusters'] 
 	for cluster in clusters:
 		if (cluster['NumberOfNodes'] > 1
@@ -24,20 +24,20 @@ def change_to_smallest(instance_type,RunningInstances) :
     			NodeType='dc2.large',
     			NumberOfNodes=1
 			)
-			RunningInstances.append(instance_type + '	modified	' + cluster['ClusterIdentifier'] )
-			print(instance_type + '	modified	' + cluster['ClusterIdentifier'] )
+			RunningInstances.append(instance_type + '	'	+ region_name_ + '	modified	' + cluster['ClusterIdentifier'] )
+			print(instance_type + '	'	+ region_name_ + '	modified	' + cluster['ClusterIdentifier'] )
 	return
 
 
-def delete_clusters(instance_type,RunningInstances) : 
-	client = boto3.client(instance_type)
+def delete_clusters(instance_type,region_name_,RunningInstances) : 
+	client = boto3.client(instance_type, region_name=region_name_)
 	clusters = client.describe_clusters(  )['Clusters'] 
 	for cluster in clusters:
 		response = client.delete_cluster(
  				ClusterIdentifier=cluster['ClusterIdentifier'],
 		)
-		RunningInstances.append(instance_type + '	deleted	' + cluster['ClusterIdentifier'] )
-		print(instance_type + '	deleted	' + cluster['ClusterIdentifier'] )
+		RunningInstances.append(instance_type + '	'	+ region_name_ + '	deleted	' + cluster['ClusterIdentifier'] )
+		print(instance_type + '	'	+ region_name_ + '	deleted	' + cluster['ClusterIdentifier'] )
 	return
 
 

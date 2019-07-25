@@ -1,0 +1,71 @@
+Start time:	2019-07-25 08:24:57.753673
+boto3 version:1.9.182
+botocore	version:1.12.182
+eu-north-1 time:	2019-07-25 08:24:58.831420
+sagemaker	eu-north-1	 does not support CompilationJobSummaries
+sagemaker	eu-north-1	 does not support LabelingJobSummaryList
+sagemaker	eu-north-1	 does not support TransformJobSummaries
+robomaker	eu-north-1	 does not support deploymentJobs
+robomaker	eu-north-1	 does not support simulationJobSummaries
+dax	eu-north-1	 does not support Clusters
+kinesisanalytics	eu-north-1	 does not support ApplicationSummaries
+ap-south-1 time:	2019-07-25 08:25:41.575625
+sagemaker	ap-south-1	 does not support CompilationJobSummaries
+robomaker	ap-south-1	 does not support deploymentJobs
+robomaker	ap-south-1	 does not support simulationJobSummaries
+kinesisanalytics	ap-south-1	 does not support ApplicationSummaries
+eu-west-3 time:	2019-07-25 08:26:04.877883
+sagemaker	eu-west-3	 does not support CompilationJobSummaries
+sagemaker	eu-west-3	 does not support LabelingJobSummaryList
+sagemaker	eu-west-3	 does not support TransformJobSummaries
+robomaker	eu-west-3	 does not support deploymentJobs
+robomaker	eu-west-3	 does not support simulationJobSummaries
+dax	eu-west-3	 does not support Clusters
+kinesisanalytics	eu-west-3	 does not support ApplicationSummaries
+eu-west-2 time:	2019-07-25 08:26:44.345562
+sagemaker	eu-west-2	 does not support CompilationJobSummaries
+robomaker	eu-west-2	 does not support deploymentJobs
+robomaker	eu-west-2	 does not support simulationJobSummaries
+dax	eu-west-2	 does not support Clusters
+eu-west-1 time:	2019-07-25 08:27:03.116127
+ap-northeast-2 time:	2019-07-25 08:27:12.271024
+sagemaker	ap-northeast-2	 does not support CompilationJobSummaries
+robomaker	ap-northeast-2	 does not support deploymentJobs
+robomaker	ap-northeast-2	 does not support simulationJobSummaries
+dax	ap-northeast-2	 does not support Clusters
+ap-northeast-1 time:	2019-07-25 08:27:48.790059
+sa-east-1 time:	2019-07-25 08:28:30.046399
+eks	sa-east-1	 does not support clusters
+sagemaker	sa-east-1	 does not support CompilationJobSummaries
+sagemaker	sa-east-1	 does not support LabelingJobSummaryList
+sagemaker	sa-east-1	 does not support TransformJobSummaries
+robomaker	sa-east-1	 does not support deploymentJobs
+robomaker	sa-east-1	 does not support simulationJobSummaries
+kinesisanalytics	sa-east-1	 does not support ApplicationSummaries
+ca-central-1 time:	2019-07-25 08:29:31.704507
+eks	ca-central-1	 does not support clusters
+sagemaker	ca-central-1	 does not support CompilationJobSummaries
+robomaker	ca-central-1	 does not support deploymentJobs
+robomaker	ca-central-1	 does not support simulationJobSummaries
+dax	ca-central-1	 does not support Clusters
+kinesisanalytics	ca-central-1	 does not support ApplicationSummaries
+ap-southeast-1 time:	2019-07-25 08:30:25.729416
+sagemaker	ap-southeast-1	 does not support CompilationJobSummaries
+ap-southeast-2 time:	2019-07-25 08:31:04.500329
+sagemaker	ap-southeast-2	 does not support CompilationJobSummaries
+robomaker	ap-southeast-2	 does not support deploymentJobs
+robomaker	ap-southeast-2	 does not support simulationJobSummaries
+eu-central-1 time:	2019-07-25 08:31:55.187719
+sagemaker	eu-central-1	 does not support CompilationJobSummaries
+us-east-1 time:	2019-07-25 08:32:00.045584
+autoscaling	us-east-1 ignoring status	test
+us-east-2 time:	2019-07-25 08:32:19.868022
+us-west-1 time:	2019-07-25 08:32:38.095532
+eks	us-west-1	 does not support clusters
+sagemaker	us-west-1	 does not support CompilationJobSummaries
+sagemaker	us-west-1	 does not support LabelingJobSummaryList
+robomaker	us-west-1	 does not support deploymentJobs
+robomaker	us-west-1	 does not support simulationJobSummaries
+kinesisanalytics	us-west-1	 does not support ApplicationSummaries
+us-west-2 time:	2019-07-25 08:33:34.109453
+End time:	2019-07-25 08:33:59.810995

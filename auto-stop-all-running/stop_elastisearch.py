@@ -9,11 +9,11 @@
 import boto3
  
 # instance_type	= 'es'
-def	delete_domains(instance_type,RunningInstances) :	
-	client	= boto3.client(instance_type)
+def	delete_domains(instance_type,region_name_,RunningInstances) :	
+	client	= boto3.client(instance_type, region_name=region_name_)
 	domains = client.list_domain_names(  )['DomainNames']
 	for domain in domains:
-		RunningInstances.append(instance_type	+ '	domain	   ' + domain['DomainName'])
+		RunningInstances.append(instance_type	+ '	'	+ region_name_ + '	domain	   ' + domain['DomainName'])
 		response = client.delete_elasticsearch_domain( DomainName=domain['DomainName']	)
 		
 	return

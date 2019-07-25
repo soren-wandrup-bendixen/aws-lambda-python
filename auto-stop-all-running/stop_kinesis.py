@@ -9,11 +9,11 @@
 import boto3
  
 # instance_type	= 'kinesis'
-def	delete_streams(instance_type,RunningInstances) :	
-	client	= boto3.client(instance_type)
+def	delete_streams(instance_type,region_name_,RunningInstances) :	
+	client	= boto3.client(instance_type, region_name=region_name_)
 	stream_names = client.list_streams(  )['StreamNames']
 	for stream_name in stream_names:
-		RunningInstances.append(instance_type	+ '	stream	   ' + stream_name)
+		RunningInstances.append(instance_type	+ '	'	+ region_name_ + '	stream	   ' + stream_name)
 		response = client.delete_stream( StreamName=stream_name	)
 		
 	return

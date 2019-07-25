@@ -9,8 +9,8 @@
 import boto3
  
 # instance_type = 'autoscaling'
-def suspend_processes(instance_type,RunningInstances) : 
-	client = boto3.client(instance_type)
+def suspend_processes(instance_type,region_name_,RunningInstances) : 
+	client = boto3.client(instance_type, region_name=region_name_)
 	# *** suspend_processes() that are active
 	auto_scale_groups = client.describe_auto_scaling_groups( )['AutoScalingGroups'] 
 	for auto_scale_group in auto_scale_groups:
@@ -18,7 +18,7 @@ def suspend_processes(instance_type,RunningInstances) :
 		auto_scale_group_name = auto_scale_group['AutoScalingGroupName']
 		# Unable to test the status => Do not log the suspend of autoscaling 
 		# RunningInstances.append(instance_type + ' ignoring status	' + auto_scale_group_name)
-		print(instance_type + ' ignoring status	' + auto_scale_group_name);
+		print(instance_type + '	'	+ region_name_ + ' ignoring status	' + auto_scale_group_name);
 		response = client.suspend_processes( AutoScalingGroupName=auto_scale_group_name )
 
 	return
