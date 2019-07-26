@@ -4,17 +4,14 @@
 # Email: soren.wandrup-Bendixen@cybercom.com
 # Created: 2019-07-01
 # Called from CloudWatch event rule	scheduled :	cron( 0	18,19 ? * * * ) 
-# Total time to run per execution is 10.4 seconds. And is set to run twice a day. 
-# Currently not stopping 
-# 1. not stopping dynamodb (no support for stop). You only pay for using it when you access it. But have to delete dax on it! 
-# 2. Not stopping lambda, cloudwatch - would kill my self
-# 3. Not stopping firehose (kinesis). Only cost money when data is ingested. So stop that instead.
+# Total time to run per execution is 10 minutes. And is set to run twice a day. 
 
 # To be developed
-# stop_batch - 
-# stop_simpledb - will delete the domain calling delete_domain
-# stop_cloudfront stop_stack_set_operation
 # stop_iot
+# stop_neptune
+# stop_batch - 
+# stop_sdb - simpledb - will delete the domain calling delete_domain
+# stop_cloudfront stop_stack_set_operation
 # change_waf change waf to free edition
 
 import datetime
@@ -85,17 +82,19 @@ def	lambda_handler(event, context):
 		if	len(RunningInstances) >	0:
 			instanceList = json.dumps(RunningInstances)
 			simple_notification.send_info(instanceList)
+		statusCode = 200
 	except Exception as exception:
 		if	len(RunningInstances) >	0:
 			instanceList = json.dumps(RunningInstances)
 		simple_notification.send_info(instanceList + ' - exception ' + traceback.format_exc() )
-		raise exception 
+		#raise exception 
+		statusCode = 404
 
 	print ('End time:	' + str(datetime.datetime.now()))
 
 
 	return	{
-		"statusCode":	200,
+		"statusCode":	statusCode,
 		"body": instanceList 
 	}
 

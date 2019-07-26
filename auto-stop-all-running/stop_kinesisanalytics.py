@@ -25,7 +25,7 @@ def stop_applications(instance_type,region_name_,RunningInstances) :
 	except EndpointConnectionError as exception:
 		print ( instance_type	 + '	'	+ region_name_ + '	 does not support ApplicationSummaries	' )
 	except ClientError as exception:
-		if exception.response['Error']['Code'] == 'InternalFailure' :
+		if exception.response['Error']['Code'] in ['InternalFailure','AccessDeniedException'] :
 			print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' )
 		else:
 #			print ( instance_type	 + '	'	+ region_name_ + '	 does not support deploymentJobs	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
