@@ -19,7 +19,7 @@ def stop_instances(instance_type,region_name_,RunningInstances) :
 		if instance['DBInstanceStatus'] in ['running','available'] and instance['Engine'] not in [ 'aurora-postgresql', 'aurora-mysql' ] :
 			instance_id = instance['DBInstanceIdentifier']
 			RunningInstances.append(instance_type + '	'	+ region_name_ + '	db_instance	' + instance_id )
-			print(instance['DBInstanceStatus']  + '	'	+ region_name_ + '	db_instance ' + instance_id);
+			print(instance['DBInstanceStatus']  + '	'	+ region_name_ + '	db_instance ' + instance_id + '	' + instance['DBClusterIdentifier']);
 			# auto remove previos snapshot 
 			snapshot_identifier = 'auto-stop-all-' + instance_id
 			try: 
@@ -69,7 +69,9 @@ def stop_clusters(instance_type,region_name_,RunningInstances) :
 					response = client.delete_db_cluster_snapshot( DBClusterSnapshotIdentifier = snapshot_identifier )
 			except client.exceptions.DBClusterSnapshotNotFoundFault:
 				print('No snapshot found with this id ' + snapshot_identifier )
-
+			except client.exceptions.InvalidDBClusterSnapshotStateFault:
+				print('Amazons aws code is not working - docdb client returns auora cluster - docdb not supported in this region ' + snapshot_identifier )
+				continue
 			response = client.create_db_cluster_snapshot( DBClusterSnapshotIdentifier=snapshot_identifier, DBClusterIdentifier=instance_id)
 			response = client.stop_db_cluster( DBClusterIdentifier=instance_id )
 	return
@@ -87,7 +89,7 @@ def autostart_clusters(instance_type,region_name_,RunningInstances) :
 				for old_snapshot in old_snapshots:	
 					if datetime.datetime.now(old_snapshot['SnapshotCreateTime'].tzinfo) - old_snapshot['SnapshotCreateTime'] > timedelta(days=5.8) :
 						RunningInstances.append(instance_type  + '	'	+ region_name_ + '	autostart db_cluster	' + instance_id )
-						print(instance['DBClusterStatus']   + '	'	+ region_name_ + '	autostart db_cluster ' + instance_id);
+						print(instance['Status']   + '	'	+ region_name_ + '	autostart db_cluster ' + instance_id);
 						# start database cluster
 						client.start_db_cluster( DBClusterIdentifier=instance_id )
 						# Can not stop while the db is starting! Must run stop after 1 hour! Scheduled from CloudWatch!. Simply running autostop twice every night!

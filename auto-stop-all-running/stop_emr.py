@@ -14,7 +14,7 @@ def stop_clusters(instance_type,region_name_,RunningInstances) :
 	for cluster in clusters:
 		cluster_id = cluster['Id']
 		RunningInstances.append(instance_type + '	'	+ region_name_ + ' cluster ' + cluster_id )
-		print(cluster['Status']  + '	'	+ region_name_ + ' cluster ' + cluster_id);
+		print(cluster['Status']['State']  + '	'	+ region_name_ + ' cluster ' + cluster_id);
 		# auto remove previos snapshot 
 		# stop database instance and make a snapshot too
 		response = client.terminate_job_flows( JobFlowIds=[cluster_id] )

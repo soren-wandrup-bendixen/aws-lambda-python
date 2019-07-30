@@ -52,9 +52,11 @@ def	lambda_handler(event, context):
 		# only in play when a list of clients is wanted. 
 		# get_list_of_possible_resources.fail_with_list('?')
 		region_names = all_region_names.get_list('ec2')
+		# for simple testing; region_names = ['us-east-1']
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
+			stop_emr.stop_clusters('emr', region_name_, RunningInstances) # Stop EMR before ec2's otherwise the ec2 of emr will be terminated individually
 			stop_elb.delete_instances('elb', region_name_,	RunningInstances) # Delete load balancers
 			stop_elb.delete_instances('elbv2', region_name_,	RunningInstances) # Delete load balancers
 			stop_ecs.stop_instances('ecs', region_name_,	RunningInstances) # Stop: Amazon Elastic Container Service (ECS)
@@ -69,7 +71,6 @@ def	lambda_handler(event, context):
 			stop_rds.autostart_clusters('rds', region_name_, RunningInstances)
 			stop_rds.stop_clusters('docdb', region_name_, RunningInstances) # stop docdb - same logic as rds cluster
 			stop_dax.delete_clusters('dax', region_name_, RunningInstances)
-			stop_emr.stop_clusters('emr', region_name_, RunningInstances)
 			stop_kinesis.delete_streams('kinesis', region_name_, RunningInstances)	
 			stop_kinesisanalytics.stop_applications('kinesisanalytics', region_name_, RunningInstances)	
 			stop_elasticache.delete_clusters('elasticache', region_name_,	RunningInstances)
