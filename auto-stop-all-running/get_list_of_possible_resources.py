@@ -36,4 +36,6 @@ def	fail_with_list(instance_type) :
 # 1. not stopping dynamodb (no support for stop). You only pay for using it when you access it. But have to delete dax on it! 
 # 2. Not stopping lambda, cloudwatch - would kill my self
 # 3. Not stopping firehose (kinesis). Only cost money when data is ingested. So stop that instead.
+# 4. Not stopping kinesisvideo. Only cost money for storing, ingesting and cosuming, not for having an active service!. 
+# 5. Not stopping kinesisanalyticsv2, already getting stopped by kinesisanalytics	
 

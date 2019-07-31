@@ -17,10 +17,10 @@ def stop_applications(instance_type,region_name_,RunningInstances) :
 	try:
 		applications = client.list_applications( ) ['ApplicationSummaries']
 		for application in applications:
-			if application['Status'] in ['READY','RUNNING','UPDATING'] :
+			if application['ApplicationStatus'] in ['RUNNING','UPDATING'] :
 				application_name = application['ApplicationName']
 				RunningInstances.append(instance_type + '	'	+ region_name_ + ' application ' + application_name )
-				print(cluster['Status']  + '	'	+ region_name_ + ' application ' + application_name);
+				print(application['ApplicationStatus']  + '	'	+ region_name_ + ' application ' + application_name);
 				response = client.stop_application( ApplicationName=application_name )
 	except EndpointConnectionError as exception:
 		print ( instance_type	 + '	'	+ region_name_ + '	 does not support ApplicationSummaries	' )

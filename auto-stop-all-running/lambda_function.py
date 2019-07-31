@@ -52,7 +52,8 @@ def	lambda_handler(event, context):
 		# only in play when a list of clients is wanted. 
 		# get_list_of_possible_resources.fail_with_list('?')
 		region_names = all_region_names.get_list('ec2')
-		# for simple testing; region_names = ['us-east-1']
+		# for simple one region testing; 
+		# region_names = ['us-east-1']
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
