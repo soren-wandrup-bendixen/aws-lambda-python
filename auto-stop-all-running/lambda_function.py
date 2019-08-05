@@ -7,12 +7,15 @@
 # Total time to run per execution is 10 minutes. And is set to run twice a day. 
 
 # To be developed
+# make snapshot of redis elasticache before delete
 # stop_iot
 # stop_neptune
 # stop_batch - 
 # stop_sdb - simpledb - will delete the domain calling delete_domain
 # stop_cloudfront stop_stack_set_operation
 # change_waf change waf to free edition
+# make snapshot of es before delete
+
 
 import datetime
 print ('Start time:	' + str(datetime.datetime.now()))
@@ -52,8 +55,7 @@ def	lambda_handler(event, context):
 		# only in play when a list of clients is wanted. 
 		# get_list_of_possible_resources.fail_with_list('?')
 		region_names = all_region_names.get_list('ec2')
-		# for simple one region testing; 
-		# region_names = ['us-east-1']
+		# region_names = ['us-east-1'] # for simple one region testing;
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)

@@ -19,7 +19,7 @@ def stop_instances(instance_type,region_name_,RunningInstances) :
 		if instance['DBInstanceStatus'] in ['running','available'] and instance['Engine'] not in [ 'aurora-postgresql', 'aurora-mysql' ] :
 			instance_id = instance['DBInstanceIdentifier']
 			RunningInstances.append(instance_type + '	'	+ region_name_ + '	db_instance	' + instance_id )
-			print(instance['DBInstanceStatus']  + '	'	+ region_name_ + '	db_instance ' + instance_id + '	' + instance['DBClusterIdentifier']);
+			print(instance['DBInstanceStatus']  + '	'	+ region_name_ + '	db_instance ' + instance_id + '	' + instance['DBInstanceIdentifier']);
 			# auto remove previos snapshot 
 			snapshot_identifier = 'auto-stop-all-' + instance_id
 			try: 
