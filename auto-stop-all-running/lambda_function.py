@@ -53,7 +53,7 @@ def	lambda_handler(event, context):
 
 	try: 
 		# only in play when a list of clients is wanted. 
-		# get_list_of_possible_resources.fail_with_list('?')
+		#get_list_of_possible_resources.fail_with_list('?')
 		region_names = all_region_names.get_list('ec2')
 		# region_names = ['us-east-1'] # for simple one region testing;
 		for region_name_ in region_names:
