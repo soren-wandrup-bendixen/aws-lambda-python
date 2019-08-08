@@ -38,4 +38,5 @@ def	fail_with_list(instance_type) :
 # 3. Not stopping firehose (kinesis). Only cost money when data is ingested. So stop that instead.
 # 4. Not stopping kinesisvideo. Only cost money for storing, ingesting and cosuming, not for having an active service!. 
 # 5. Not stopping kinesisanalyticsv2, already getting stopped by kinesisanalytics	
+# 6. Not stopping iot. Most likely iot in test will be covered by free tier
 

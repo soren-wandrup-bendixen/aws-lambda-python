@@ -7,13 +7,10 @@
 # Total time to run per execution is 10 minutes. And is set to run twice a day. 
 
 # To be developed
-# make snapshot of redis elasticache before delete
-# stop_iot
-# stop_neptune
-# stop_batch - 
 # stop_sdb - simpledb - will delete the domain calling delete_domain
 # stop_cloudfront stop_stack_set_operation
 # change_waf change waf to free edition
+# alexaforbusiness
 # make snapshot of es before delete
 
 
@@ -45,6 +42,9 @@ import stop_glue
 import stop_elastisearch
 import stop_dms
 import stop_redshift
+import stop_neptune
+import stop_batch
+
 
 def	lambda_handler(event, context):
 
@@ -59,6 +59,7 @@ def	lambda_handler(event, context):
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
+			stop_batch.disable_job_queues('batch', region_name_, RunningInstances)
 			stop_emr.stop_clusters('emr', region_name_, RunningInstances) # Stop EMR before ec2's otherwise the ec2 of emr will be terminated individually
 			stop_elb.delete_instances('elb', region_name_,	RunningInstances) # Delete load balancers
 			stop_elb.delete_instances('elbv2', region_name_,	RunningInstances) # Delete load balancers
@@ -82,7 +83,8 @@ def	lambda_handler(event, context):
 			stop_dms.delete_instances('dms', region_name_,	RunningInstances)
 			stop_redshift.change_to_smallest('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
 			# stop_redshift.delete_cluster('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
-			#	stop_iot_stop_all('iot', region_name_,	RunningInstances)	
+			stop_neptune.delete_clusters('neptune', region_name_,	RunningInstances)	
+			stop_neptune.delete_instances('neptune', region_name_, RunningInstances)
 		if	len(RunningInstances) >	0:
 			instanceList = json.dumps(RunningInstances)
 			simple_notification.send_info(instanceList)
