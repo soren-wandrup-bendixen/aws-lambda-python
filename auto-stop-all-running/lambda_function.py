@@ -1,4 +1,4 @@
-# File_name: lambda_handler.py
+# File_name: lambda_function.py
 # Purpose: Lambda function to stop all aws services	that cost money	in dev and test
 # Author: Søren	Wandrup-Bendixen
 # Email: soren.wandrup-Bendixen@cybercom.com
@@ -7,11 +7,14 @@
 # Total time to run per execution is 10 minutes. And is set to run twice a day. 
 
 # To be developed
+# make snapshot of es before delete
 # stop_sdb - simpledb - will delete the domain calling delete_domain
 # stop_cloudfront stop_stack_set_operation
 # change_waf change waf to free edition
 # alexaforbusiness
-# make snapshot of es before delete
+# llearning
+
+
 
 
 import datetime
