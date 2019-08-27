@@ -28,10 +28,10 @@ def	stop_jobs(instance_type,region_name_,RunningInstances) :
 			RunningInstances.append(instance_type	 + '	'	+ region_name_ + '	CompilationJobName	  ' + job_name)
 			response = client.stop_compilation_job( CompilationJobName=job_name )
 	except ClientError as exception:
-		if exception.response['Error']['Code'] == 'UnknownOperationException' and 'The requested operation is not supported in the called region.' in exception.response['Error']['Message'] :
+		if ( exception.response['Error']['Code'] == 'UnknownOperationException' and 'The requested operation is not supported in the called region.' in exception.response['Error']['Message'] ) or exception.response['Error']['Code'] in ['InternalFailure','AccessDeniedException'] :
 			print ( instance_type	 + '	'	+ region_name_ + '	 does not support CompilationJobSummaries	' )
 		else:
-#			print ( instance_type	 + '	'	+ region_name_ + '	 does not support CompilationJobSummaries	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			print ( instance_type	 + '	'	+ region_name_ + '	 does not support CompilationJobSummaries	' + exception.response['Error']['Code'] + '+' + exception.response['Error']['Message']) 
 			raise exception
 			
 	# *** stop_hyper_parameter_tuning_job that	are	running
