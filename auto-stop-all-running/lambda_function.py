@@ -85,8 +85,8 @@ def	lambda_handler(event, context):
 			stop_glue.stop_jobs('glue', region_name_,	RunningInstances)
 			stop_elastisearch.delete_domains('es', region_name_,	RunningInstances)
 			stop_dms.delete_instances('dms', region_name_,	RunningInstances)
-			stop_redshift.change_to_smallest('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
-			# stop_redshift.delete_cluster('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
+			# stop_redshift.change_to_smallest('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
+			stop_redshift.delete_clusters('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
 			stop_neptune.delete_clusters('neptune', region_name_,	RunningInstances)	
 			stop_neptune.delete_instances('neptune', region_name_, RunningInstances)
 		if	len(RunningInstances) >	0:

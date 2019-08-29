@@ -14,7 +14,7 @@ def change_to_smallest(instance_type,region_name_,RunningInstances) :
 	clusters = client.describe_clusters(  )['Clusters'] 
 	for cluster in clusters:
 		if (cluster['NumberOfNodes'] > 1
-		   or cluster['ClusterType'] != 'single-node'
+#		   or cluster['ClusterType'] != 'single-node'
 		   or cluster['NodeType'] != 'dc2.large'
 		  
 		):
@@ -33,11 +33,17 @@ def delete_clusters(instance_type,region_name_,RunningInstances) :
 	client = boto3.client(instance_type, region_name=region_name_)
 	clusters = client.describe_clusters(  )['Clusters'] 
 	for cluster in clusters:
-		response = client.delete_cluster(
- 				ClusterIdentifier=cluster['ClusterIdentifier'],
-		)
-		RunningInstances.append(instance_type + '	'	+ region_name_ + '	deleted	' + cluster['ClusterIdentifier'] )
-		print(instance_type + '	'	+ region_name_ + '	deleted	' + cluster['ClusterIdentifier'] )
+		cluster_id = cluster['ClusterIdentifier']
+		snapshot_identifier = 'auto-stop-all-' + cluster_id
+		try: 
+			RunningInstances.append(instance_type  + '	'	+ region_name_ + '	deleted	' + cluster_id )
+			print(instance_type + '	'	+region_name_ + '	deleted	' + cluster_id )
+			old_snapshots = client.describe_cluster_snapshots( SnapshotIdentifier = snapshot_identifier )
+			if len(old_snapshots) > 0:
+					response = client.delete_cluster_snapshot( SnapshotIdentifier = snapshot_identifier )
+		except client.exceptions.ClusterSnapshotNotFoundFault :
+			print('No snapshot found with this id ' + snapshot_identifier )
+#		response = client.create_cluster_snapshot( SnapshotIdentifier=snapshot_identifier, ClusterIdentifier=cluster_id)
+#		response = client.delete_cluster( ClusterIdentifier=cluster_id, SkipFinalClusterSnapshot=True )
+		response = client.delete_cluster( ClusterIdentifier=cluster_id, SkipFinalClusterSnapshot=False, FinalClusterSnapshotIdentifier = snapshot_identifier )
 	return
-
-
