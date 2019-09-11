@@ -1,0 +1,88 @@
+Set up credentials (in e.g. ~/.aws/credentials):
+
+[default]
+aws_access_key_id = YOUR_KEY
+aws_secret_access_key = YOUR_SECRET
+Then, set up a default region (in e.g. ~/.aws/config):
+
+[default]
+region=us-east-1
+Then, from a Python3 interpreter:
+
+Place yourself in the directory (cost-explorer-reporting) with the lambda_function.py
+
+> pip install -r requirements.txt -t .
+This command installs the needed extra packages and their required dependencies in the directory the command is executed within. 
+ Please note that this will install pandas and numpy for your PC only!
+mkdir ../pc_numpy/
+mkdir ../pc_pandas/
+mv numpy* ../pc_numpy/
+mv pandas* ../pc_pandas/
+
+
+rm -f -R numpys* 
+rm -f -R pandas*
+https://stackoverflow.com/questions/43877692/pandas-in-aws-lambda-gives-numpy-error/52665589#52665589
+So fetch the file from: https://pypi.org/project/numpy/#files
+I fetched this file
+https://files.pythonhosted.org/packages/e5/e6/c3fdc53aed9fa19d6ff3abf97dfad768ae3afce1b7431f7500000816bda5/numpy-1.17.2-cp36-cp36m-manylinux1_x86_64.whl
+unzipped it to the directory (cost-explorer-reporting) - Ending up with numpy directories: "numpy" and "numpy-1.17.2.dist-info" 
+
+Also fetch from this site: https://pypi.org/project/pandas/#files
+https://files.pythonhosted.org/packages/73/9b/52e228545d14f14bb2a1622e225f38463c8726645165e1cb7dde95bfe6d4/pandas-0.25.1-cp36-cp36m-manylinux1_x86_64.whl
+unzipped it to the directory (cost-explorer-reporting) - Ending up with pandas directories: "pandas" and "pandas-0.25.1.dist-info" 
+
+now move these directories for aws one level up as the code to be used in aws 
+mkdir ../aws_numpy/
+mkdir ../aws_pandas/
+mv numpy* ../aws_numpy/
+mv pandas* ../aws_pandas/
+
+test the end result with this :
+
+rm -f -R numpys* 
+rm -f -R pandas*
+cp -r ../pc_numpy/* .
+cp -r ../pc_pandas/* .
+export TOPIC_ARN='arn:aws:sns:us-east-1:015670528421:cost-explorer-sns-topic'
+export S3_BUCKET='soren-personalize-test'
+python3 <<EOF
+import lambda_function
+context = []
+event = []
+lambda_function.lambda_handler(event,context)
+quit()
+EOF
+
+Now in the directory with the lambda_function.py (cost-explorer-reporting) file zip it all:
+. Make sure that its not more than 10Mbyte. Otherwise it has to be uploaded into s3 first!.
+When you have zipped it. Make sure that inside the zip file that there is no zip_directory. Meaning that lambda_handler.py is in the root of the zip file!
+rm -f -R numpys* 
+rm -f -R pandas*
+cp -r ../aws_numpy/* .
+cp -r ../aws_pandas/* .
+zip -r ../cost-explorer-reporting.zip *
+
+
+In aws gui - make the lambda function : cost-explorer-reporting - using python 3.6 or newer. Make the code from scratch. Code will be uploaded as zip!. 
+Now upload the zip file (cost-explorer-reporting.zip) to aws lambda funtion
+
+Please note its not possible to edit manually anymore. Now test it in aws gui!.
+
+recommend also installing aws-cli
+
+on my opensuse its:
+zypper install aws-cli
+
+
+aws lambda update-function-code --function-name cost-explorer-reporting --zip-file fileb://cost-explorer-reporting.zip
+
+now set the basic timeout to 5 minutes. For our small account it took 5.2 seconds to run. 
+And leave the memory at 128MB. On our system its using 103MB!
+configure test event - use default and call it whatever
+Make sure the role has access to read data from Cost Explorer. I have given the role admin. Did not find the correct policy yet.  
+Make sure that the S3 bucket that you upload to has granted write access from lamdbda
+Set up the environment variables: Here are my values
+TOPIC_ARN	arn:aws:sns:us-east-1:015670528421:cost-explorer-sns-topic
+S3_BUCKET	soren-personalize-test
+Now run test from the lambda function
