@@ -4,7 +4,7 @@
 # Author: Søren	Wandrup-Bendixen
 # Email: soren.wandrup-Bendixen@cybercom.com
 # Created: 2019-07-01
-# Called from lambda_handler.py
+# Called from lambda_function.py
 
 import boto3
  

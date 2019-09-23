@@ -47,7 +47,7 @@ import stop_dms
 import stop_redshift
 import stop_neptune
 import stop_batch
-
+import stop_personalize
 
 def	lambda_handler(event, context):
 
@@ -60,8 +60,10 @@ def	lambda_handler(event, context):
 		region_names = all_region_names.get_list('ec2')
 		# region_names = ['us-east-1'] # for simple one region testing;
 		# region_names = ['us-west-2'] # for simple one region testing; 
+		# region_names = ['eu-north-1'] # for simple one region testing;
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
+			stop_personalize.delete_campaigns('personalize', region_name_, RunningInstances)
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
 			stop_batch.disable_job_queues('batch', region_name_, RunningInstances)
 			stop_emr.stop_clusters('emr', region_name_, RunningInstances) # Stop EMR before ec2's otherwise the ec2 of emr will be terminated individually
