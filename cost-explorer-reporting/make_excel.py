@@ -63,6 +63,9 @@ def create_excel_file_in_memory ( dataFrame ) :
 			'values':     ['Pivot', 4, column, pivot.shape[0]-1, column]
 		})
 	worksheet.insert_chart('A1', chart, {'x_scale': 3.0, 'y_scale': 3.0})
+	# Freeze the panes of the pivot table
+	worksheet = workbook.get_worksheet_by_name('Pivot')
+	worksheet.freeze_panes('B3')
 	# Close the Pandas Excel writer and output the Excel file.
 	writer.save()	
 	return output

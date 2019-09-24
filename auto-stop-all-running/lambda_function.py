@@ -48,6 +48,7 @@ import stop_redshift
 import stop_neptune
 import stop_batch
 import stop_personalize
+import stop_shield
 
 def	lambda_handler(event, context):
 
@@ -63,7 +64,6 @@ def	lambda_handler(event, context):
 		# region_names = ['eu-north-1'] # for simple one region testing;
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
-			stop_personalize.delete_campaigns('personalize', region_name_, RunningInstances)
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
 			stop_batch.disable_job_queues('batch', region_name_, RunningInstances)
 			stop_emr.stop_clusters('emr', region_name_, RunningInstances) # Stop EMR before ec2's otherwise the ec2 of emr will be terminated individually
@@ -91,6 +91,9 @@ def	lambda_handler(event, context):
 			stop_redshift.delete_clusters('redshift', region_name_,	RunningInstances) # As I see it either I have to delete the cluster or turn it into a single-node cluster. Cant just stop it.
 			stop_neptune.delete_clusters('neptune', region_name_,	RunningInstances)	
 			stop_neptune.delete_instances('neptune', region_name_, RunningInstances)
+			stop_personalize.delete_campaigns('personalize', region_name_, RunningInstances)
+		# Global services	
+		stop_shield.delete_advanced('shield', RunningInstances)
 		if	len(RunningInstances) >	0:
 			instanceList = json.dumps(RunningInstances)
 			simple_notification.send_info(instanceList)

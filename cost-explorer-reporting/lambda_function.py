@@ -30,7 +30,7 @@ def lambda_handler(event, context):
 	client = boto3.client('ce')
 	# Get the cost from Cost explorer
 	cost_usage_response = cost_explorer.extraxt_full ( 
-		  datetime.date.today()-timedelta(days=100) # start_date_
+		  datetime.date.today()-timedelta(days=366) # start_date_
 		, datetime.date.today()-timedelta(days=1) # end_date_
 		, 'DAILY' # granaluarity_
 		, {"Not": {"Dimensions": {"Key": "RECORD_TYPE","Values": ["Credit", "Refund", "Upfront", "Support"]}}} # filter_
