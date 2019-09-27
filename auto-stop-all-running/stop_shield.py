@@ -15,13 +15,13 @@ def delete_advanced(instance_type,RunningInstances) :
 		client	 = boto3.client(instance_type)
 		subscriptions = client.describe_subscription() ['Subscription']
 		for subscription in subscriptions:
-			RunningInstances.append(instance_type + '	'	+ ' -please contact aws support to stop this -  StartTime ' + subscription['StartTime'] )
-			print(instance_type + '	'	+ ' -please contact aws support to stop this -  StartTime ' + subscription['StartTime'] );
+			RunningInstances.append(instance_type + '	'	+ 'Global' + '	please contact aws support to stop this -  StartTime ' + subscription['StartTime'] )
+			print(instance_type + '	'	+ 'Global' + '	please contact aws support to stop this -  StartTime ' + subscription['StartTime'] );
 	except ClientError as exception:
 		if exception.response['Error']['Code'] == 'ResourceNotFoundException' :
-			print ( instance_type	 + '	'	+ '	 all ok - no advanced	' )
+			print ( instance_type + '	'	+ 'Global' + '	all ok - no advanced	' )
 		else:
-			print ( instance_type	 + '	 does not support describe_subscription	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
+			print ( instance_type + '	'	+ 'Global' + '	does not support describe_subscription	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
 			raise exception
 	
 #	protections = client.list_protections(  ) ['Protections']
