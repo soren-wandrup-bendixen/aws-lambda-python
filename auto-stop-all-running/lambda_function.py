@@ -14,13 +14,11 @@
 # stop_cloudfront (stop_stack_set_operation)
 # stop_alexaforbusiness
 # stop_llearning
-# stop_qldb (delete_ledger)
-# make snapshot of es before delete
+# make snapshot of elastic search	 before delete
 # stop_support root account, report if not free
 
 import datetime
 print ('Start time:	' + str(datetime.datetime.now()))
-
 
 import json
 import simple_notification  
@@ -52,12 +50,13 @@ import stop_personalize
 import stop_shield
 import stop_lightsail
 import stop_sdb
+import stop_dynamodb
+import stop_datapipeline
+import stop_qldb
 
 def	lambda_handler(event, context):
-
 	RunningInstances =	[]
 	instanceList = ''
-
 	try: 
 		# only in play when a list of clients is wanted. 
 		#get_list_of_possible_resources.fail_with_list('?')
@@ -69,6 +68,9 @@ def	lambda_handler(event, context):
 		# region_names = ['ap-east-1'] # for simple one region testing; Hongkong
 		for region_name_ in region_names:
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
+			stop_dynamodb.change_billing_mode('dynamodb', region_name_, RunningInstances)
+			stop_datapipeline.inactivate_pipelines('datapipeline', region_name_, RunningInstances)
+			stop_qldb.delete_ledgers('qldb', region_name_, RunningInstances)
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
 			stop_batch.disable_job_queues('batch', region_name_, RunningInstances)
 			stop_emr.stop_clusters('emr', region_name_, RunningInstances) # Stop EMR before ec2's otherwise the ec2 of emr will be terminated individually
@@ -113,10 +115,7 @@ def	lambda_handler(event, context):
 		simple_notification.send_info(instanceList + ' - exception ' + traceback.format_exc() )
 		#raise exception 
 		statusCode = 404
-
 	print ('End time:	' + str(datetime.datetime.now()))
-
-
 	return	{
 		"statusCode":	statusCode,
 		"body": instanceList 

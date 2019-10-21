@@ -32,12 +32,12 @@ Place yourself in the directory (auto_stop_all) with the lambda_function.py
 
 Once in this directory create a requirements.txt file requiring the latest version of the boto3 and botocore modules, or add the same to your existing requirements.txt:
 
-boto3==1.9.182
-botocore==1.12.182
+boto3==1.9.253
+botocore==1.12.253
 
 Once this change is made, issue the command:
 
-> pip install -r requirements.txt -t .
+> pip install -r requirements.txt -t . -- upgrade
 This command installs the boto3 and botocore correct versions and their required dependencies in the directory the command is executed within. The result is a directory such as:
 
 If needed Change the code that calls boto3. But its not required as long as you follow this plan!
@@ -68,3 +68,6 @@ zypper install aws-cli
 
 
 aws lambda update-function-code --function-name auto-stop-all-running --zip-file fileb://auto_stop_all.zip
+
+pip install botocore --upgrade
+pip install boto3 --upgrade
