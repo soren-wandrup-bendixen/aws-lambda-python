@@ -67,6 +67,7 @@ def	lambda_handler(event, context):
 		# region_names = ['me-south-1'] # for simple one region testing; Bahrain
 		# region_names = ['ap-east-1'] # for simple one region testing; Hongkong
 		for region_name_ in region_names:
+			# RunningInstances.append( str(event['region_set']) + '#' + region_name_ + '#' )
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
 			stop_dynamodb.change_billing_mode('dynamodb', region_name_, RunningInstances)
 			stop_datapipeline.inactivate_pipelines('datapipeline', region_name_, RunningInstances)
