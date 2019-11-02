@@ -9,7 +9,7 @@
 import boto3
 from botocore.exceptions import EndpointConnectionError
 from botocore.exceptions import UnknownServiceError
-
+from botocore.exceptions import ClientError
 
 # instance_type	= 'qldb'
 def	delete_ledgers(instance_type,region_name_,RunningInstances) :	
@@ -23,7 +23,7 @@ def	delete_ledgers(instance_type,region_name_,RunningInstances) :
 	except EndpointConnectionError as exception:
 		print ( instance_type	 + '	'	+ region_name_ + '	 does not support list_ledgers	' )
 	except ClientError as exception:
-		if exception.response['Error']['Code'] == 'ForbiddenException' :
+		if exception.response['Error']['Code'] in ['ForbiddenException','AccessDeniedException'] :
 			print ( instance_type	 + '	'	+ region_name_ + '	 does not support list_ledgers	' )
 		else:
 #			print ( instance_type	 + '	'	+ region_name_ + '	 does not support list_ledgers	' + exception.response['Error']['Code'] + exception.response['Error']['Message']) 
