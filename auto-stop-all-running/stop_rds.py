@@ -72,8 +72,14 @@ def stop_clusters(instance_type,region_name_,RunningInstances) :
 			except client.exceptions.InvalidDBClusterSnapshotStateFault:
 				print('Amazons aws code is not working - docdb client returns auora cluster - docdb not supported in this region ' + snapshot_identifier )
 				continue
-			response = client.create_db_cluster_snapshot( DBClusterSnapshotIdentifier=snapshot_identifier, DBClusterIdentifier=instance_id)
-			response = client.stop_db_cluster( DBClusterIdentifier=instance_id )
+			print(instance) 
+			if instance['EngineMode'] in ['serverless']:
+				if instance['DeletionProtection'] :
+					response = client.modify_db_cluster( DBClusterIdentifier=instance_id, DeletionProtection=False )
+				response = client.delete_db_cluster( DBClusterIdentifier=instance_id, SkipFinalSnapshot=False,FinalDBSnapshotIdentifier=snapshot_identifier)
+			else:
+				response = client.create_db_cluster_snapshot( DBClusterSnapshotIdentifier=snapshot_identifier, DBClusterIdentifier=instance_id)
+				response = client.stop_db_cluster( DBClusterIdentifier=instance_id )
 	return
 
 
