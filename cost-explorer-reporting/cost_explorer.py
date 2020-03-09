@@ -36,8 +36,8 @@ def extraxt_full ( start_date_, end_date_, granularity_, filter_ ):
         		},
     		]
 	)
-	cost_usage_response = response
-	while 'nextToken' in response : 
+	cost_usage_response = response['ResultsByTime']
+	while 'NextPageToken' in response : 
 		response = client.get_cost_and_usage(
 		      TimePeriod={
     		      'Start': start_date_.isoformat()
@@ -52,7 +52,8 @@ def extraxt_full ( start_date_, end_date_, granularity_, filter_ ):
             		'Key': 'SERVICE'
         		},
     		]
-			, NextPageToken=response['nextToken']
+			, NextPageToken=response['NextPageToken']
 		)
+		print(response)
 		cost_usage_response.extend(response['ResultsByTime'])
 	return cost_usage_response

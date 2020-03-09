@@ -11,17 +11,19 @@ import xlsxwriter
 import numpy
 import os
 import io
+import datetime
+
 
 def make_detail_dataframe ( cost_usage_response ):
 	# Create a Pandas dataframe from some data.
-	# df = pandas.DataFrame.from_dict(cost_usage_response['ResultsByTime'])
+	# df = pandas.DataFrame.from_dict(cost_usage_response)
 	rows = [] 
-	for usage_interval_keys in cost_usage_response['ResultsByTime'] :
+	for usage_interval_keys in cost_usage_response :
 		# start and end date
 		for usage_key in usage_interval_keys['Groups'] :
 			if float(usage_key['Metrics']['UnblendedCost']['Amount']) > 0.002 : # has to be more than 0.2 cents per day!
-				row = {
-			  		  'start date':usage_interval_keys['TimePeriod']['Start']
+				row = { 
+			  		  'start date': pandas.to_datetime(arg=usage_interval_keys['TimePeriod']['Start'], format= '%Y-%m-%d')
 #					, 'end date':usage_interval_ke,ys['TimePeriod']['End']
 					, 'usage type':usage_key['Keys'][0]
 					, 'amount value': float(usage_key['Metrics']['UnblendedCost']['Amount'])
