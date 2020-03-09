@@ -52,7 +52,7 @@ def	lambda_handler(event, context):
 #				logger.info(str(i) + '#' + match.group(i))
 			succeeded_record_count += 1
 			test_date = ( datetime.datetime.strptime(match.group(2), '%d/%b/%Y:%H:%M:%S')).isoformat()
-			# 27/Jan/2019:15:08:29
+			# 27/Jan/2020:15:08:29
 			data_field =	{
 				'host':	match.group(1),
 				'timestamp': ( datetime.datetime.strptime(match.group(2), '%d/%b/%Y:%H:%M:%S')).isoformat(),
