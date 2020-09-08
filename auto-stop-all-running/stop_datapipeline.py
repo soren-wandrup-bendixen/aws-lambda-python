@@ -17,15 +17,34 @@ def	inactivate_pipelines(instance_type,region_name_,RunningInstances) :
 		for pipeline in pipelines['pipelineIdList']:
 			pipeline_description_list = client.describe_pipelines(pipelineIds=[pipeline['id']])['pipelineDescriptionList']
 			fields = pipeline_description_list[0]['fields']
-			print(fields)
 			for field in fields :
-				if field['key'] == 'Status' :
-					if field['stringValue'] == 'Active':
+				if field['key'] == '@pipelineState' :
+					if field['stringValue'] in ['ACTIVE']:
 						RunningInstances.append(instance_type	+ '	'	+ region_name_ + '	pipeline	   ' + pipeline['id'])
-						response = client.deactivate_pipeline(pipelineId=pipeline['id'], cancelActive=True)
+						response = client.deactivate_pipeline(pipelineId=pipeline['id'], cancelActive=True )
 					exit
 	except EndpointConnectionError as exception:
 		print ( instance_type	 + '	'	+ region_name_ + '	 does not support list_pipelines	' )
 	return
+
+def	delete_pipelines(instance_type,region_name_,RunningInstances) :	
+	client	= boto3.client(instance_type, region_name=region_name_)
+	try:
+		pipelines = client.list_pipelines(  )
+		for pipeline in pipelines['pipelineIdList']:
+			pipeline_description_list = client.describe_pipelines(pipelineIds=[pipeline['id']])['pipelineDescriptionList']
+			fields = pipeline_description_list[0]['fields']
+			for field in fields :
+				if field['key'] == '@pipelineState' :
+					if field['stringValue'] in ['PENDING']: 
+						RunningInstances.append(instance_type	+ '	'	+ region_name_ + '	activate pipeline	   ' + pipeline['id'])
+						response = client.activate_pipeline(pipelineId=pipeline['id'] )
+					exit
+			RunningInstances.append(instance_type	+ '	'	+ region_name_ + '	delete pipeline	   ' + pipeline['id'])
+			response = client.deactivate_pipeline(pipelineId=pipeline['id'], cancelActive=True )
+	except EndpointConnectionError as exception:
+		print ( instance_type	 + '	'	+ region_name_ + '	 does not support list_pipelines	' )
+	return
+
 
 

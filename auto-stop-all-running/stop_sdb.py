@@ -14,7 +14,7 @@ def	delete_domains(instance_type,region_name_,RunningInstances) :
 	client	= boto3.client(instance_type, region_name=region_name_)
 	try:
 		domains = client.list_domains(  )
-		print(domains)
+		#print(domains)
 		if 'DomainNames' in domains:
 			for domain_name in domains['DomainNames']:
 				RunningInstances.append(instance_type	+ '	'	+ region_name_ + '	domain	   ' + domain_name)

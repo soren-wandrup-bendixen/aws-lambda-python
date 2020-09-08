@@ -1,0 +1,23 @@
+attrs==19.3.0
+aws-cdk.assets==1.27.0
+aws-cdk.aws-cloudwatch==1.27.0
+aws-cdk.aws-ec2==1.27.0
+aws-cdk.aws-events==1.27.0
+aws-cdk.aws-iam==1.27.0
+aws-cdk.aws-kms==1.27.0
+aws-cdk.aws-lambda==1.27.0
+aws-cdk.aws-logs==1.27.0
+aws-cdk.aws-s3==1.27.0
+aws-cdk.aws-s3-assets==1.27.0
+aws-cdk.aws-sqs==1.27.0
+aws-cdk.aws-ssm==1.27.0
+aws-cdk.core==1.27.0
+aws-cdk.cx-api==1.27.0
+aws-cdk.region-info==1.27.0
+cattrs==1.0.0
+jsii==0.22.0
+publication==0.0.3
+python-dateutil==2.8.1
+six==1.14.0
+-e git+https://github.com/soren-wandrup-bendixen/aws-lambda-python.git@d5baca24c441d364008fe9606a44518c2328c6d2#egg=test_lambda_in_cdk&subdirectory=test_lambda_in_cdk
+typing-extensions==3.7.4.1

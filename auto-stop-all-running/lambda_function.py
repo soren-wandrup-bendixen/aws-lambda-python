@@ -54,6 +54,10 @@ import stop_sdb
 import stop_dynamodb
 import stop_datapipeline
 import stop_qldb
+import stop_vpc_endpoint
+import stop_elastic_ip
+import stop_secrets_manager
+import stop_cloudwatch
 
 def	lambda_handler(event, context):
 	RunningInstances =	[]
@@ -62,6 +66,7 @@ def	lambda_handler(event, context):
 		# only in play when a list of clients is wanted. 
 		#get_list_of_possible_resources.fail_with_list('?')
 		region_names = all_region_names.get_list('ec2',event['region_set'])
+		# region_names = ['eu-west-1'] # for simple one region testing; Ireland
 		# region_names = ['us-east-1'] # for simple one region testing; N. Virginia
 		# region_names = ['us-west-2'] # for simple one region testing; Oregon
 		# region_names = ['eu-north-1'] # for simple one region testing; Stockholm
@@ -71,7 +76,9 @@ def	lambda_handler(event, context):
 			# RunningInstances.append( str(event['region_set']) + '#' + region_name_ + '#' )
 			print (region_name_ + ' time:	' + str(datetime.datetime.now()))
 			stop_dynamodb.change_billing_mode('dynamodb', region_name_, RunningInstances)
-			stop_datapipeline.inactivate_pipelines('datapipeline', region_name_, RunningInstances)
+			# You will still be charged for inactive pipelines. Not a lot but some
+			#stop_datapipeline.inactivate_pipelines('datapipeline', region_name_, RunningInstances)
+			stop_datapipeline.delete_pipelines('datapipeline', region_name_, RunningInstances)
 			stop_qldb.delete_ledgers('qldb', region_name_, RunningInstances)
 			stop_autoscaling.suspend_processes('autoscaling', region_name_, RunningInstances)
 			stop_batch.disable_job_queues('batch', region_name_, RunningInstances)
@@ -105,6 +112,12 @@ def	lambda_handler(event, context):
 			stop_neptune.delete_clusters('neptune', region_name_,	RunningInstances)	
 			stop_neptune.delete_instances('neptune', region_name_, RunningInstances)
 			stop_personalize.delete_campaigns('personalize', region_name_, RunningInstances)
+			stop_vpc_endpoint.delete_vpc_endpoints('ec2', region_name_,	RunningInstances)
+			# Elastiv ip's that are not in use cost 0.01$/hour
+			stop_elastic_ip.release_inactive_elastic_ips('ec2', region_name_,	RunningInstances)
+			# A secret cost 0.4 $/months
+			stop_secrets_manager.delete_secrets('secretsmanager', region_name_,	RunningInstances)
+			#stop_cloudwatch.delete_alarms('cloudwatch', region_name_,	RunningInstances)
 		# Global services	
 		stop_shield.delete_advanced('shield', RunningInstances) # WAF shield
 		if	len(RunningInstances) >	0:

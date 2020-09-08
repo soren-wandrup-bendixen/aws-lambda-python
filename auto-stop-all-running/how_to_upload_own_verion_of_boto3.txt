@@ -1,3 +1,56 @@
+
+What AMI image is the same as lambda for python
+https://tecadmin.net/install-python-3-7-amazon-linux/
+
+
+sudo yum install gcc openssl-devel bzip2-devel libffi-devel
+
+cd /opt
+sudo wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
+sudo tar xzf Python-3.7.4.tgz
+
+cd Python-3.7.4
+sudo ./configure --enable-optimizations
+sudo make altinstall
+
+sudo rm /usr/src/Python-3.7.4.tgz
+
+python3.7 -m ensurepip
+
+
+
+cd ~
+mkdir fastparquet
+cd fastparquet
+
+echo fastparquet > requirements.txt
+echo s3fs >> requirements.txt
+echo snappy >> requirements.txt
+
+pip3.7 install -r requirements.txt -t .
+
+mv boto* ..
+
+[ec2-user@ip-172-31-18-177 ~]$ mv fastparquet python
+[ec2-user@ip-172-31-18-177 ~]$ mkdir fastparquet
+[ec2-user@ip-172-31-18-177 ~]$ mv python fastparquet
+[ec2-user@ip-172-31-18-177 ~]$ 
+
+mv fastparquet aws_fastparquet_cp37
+
+
+rm ../aws_fastparquet_cp37.zip
+zip -r ../aws_fastparquet_cp37 *
+cd ..
+aws lambda publish-layer-version --layer-name aws_pandas_cp37 --description "aws_pandas_cp37" --license-info "Soren Bendixen" \
+--zip-file fileb://aws_pandas_cp37.zip --compatible-runtimes python3.7
+
+aws_fastparquet_cp37.zip
+
+228204
+
+
+
 export your lambda function from aws
 On your linux PC:
 unzip the zip file and rename the directory to your preferred name - in this case calling it auto_stop_all - it has no effect when you upload it zipped later to aws.

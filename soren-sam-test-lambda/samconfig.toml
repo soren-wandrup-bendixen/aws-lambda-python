@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "soren-sam-test-lambda"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-pno37q2379dg"
+s3_prefix = "soren-sam-test-lambda"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

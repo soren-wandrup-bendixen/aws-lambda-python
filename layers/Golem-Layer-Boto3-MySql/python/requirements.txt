@@ -1,0 +1,3 @@
+boto3==1.9.253
+botocore==1.12.253
+mysql-connector-python==8.0.18

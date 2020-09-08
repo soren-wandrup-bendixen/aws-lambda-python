@@ -16,7 +16,7 @@ def	change_billing_mode(instance_type,region_name_,RunningInstances) :
 		tables = client.list_tables(  )
 		for table_name in tables['TableNames']:
 			table_desc = client.describe_table(TableName=table_name)['Table']
-			print(table_desc)
+			#print(table_desc)
 			if 'BillingModeSummary' in table_desc:
 				if table_desc['BillingModeSummary']['BillingMode'] == 'PAY_PER_REQUEST':
 					continue
